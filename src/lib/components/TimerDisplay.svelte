@@ -2,7 +2,7 @@
   let { endTime, startTime = null }: { endTime: Date; startTime: Date | null } =
     $props();
 
-  let remaining = $state(0);
+  let remainingMs = $state(0);
   let nowMs = $state(Date.now());
 
   $effect(() => {
@@ -10,7 +10,7 @@
 
     function tick() {
       nowMs = Date.now();
-      remaining = Math.max(0, target.getTime() - nowMs);
+      remainingMs = Math.max(0, target.getTime() - nowMs);
     }
 
     tick();
@@ -18,26 +18,45 @@
     return () => clearInterval(id);
   });
 
-  let totalSeconds = $derived(Math.floor(remaining / 1000));
+  let totalSeconds = $derived(Math.floor(remainingMs / 1000));
 
-  function formatDuration(secs: number): string {
+  /*
+   * Show the seconds only when the page is initially loaded and at the end of
+   * the timer.
+   */
+
+  const mountTime = Date.now();
+  const INITIAL_SECONDS_DURATION = 30 * 1000; // 30 seconds
+  const FINAL_SECONDS_THRESHOLD = 2 * 60 * 1000; // 2 minutes
+
+  let showSeconds = $derived(
+    remainingMs < FINAL_SECONDS_THRESHOLD ||
+      nowMs - mountTime < INITIAL_SECONDS_DURATION
+  );
+
+  function formatDuration(secs: number, showSecs = true): string {
     const h = Math.floor(secs / 3600);
     const m = Math.floor((secs % 3600) / 60);
     const s = secs % 60;
     const mm = String(m).padStart(2, '0');
     const ss = String(s).padStart(2, '0');
-    if (h > 0) return `${String(h).padStart(2, '0')}:${mm}:${ss}`;
-    return `${mm}:${ss}`;
+    if (showSecs) {
+      if (h > 0) return `${String(h).padStart(2, '0')}:${mm}:${ss}`;
+      return `${mm}:${ss}`;
+    } else {
+      if (h > 0) return `${String(h).padStart(2, '0')}:${mm}`;
+      return mm;
+    }
   }
 
-  let displayTime = $derived(formatDuration(totalSeconds));
+  let displayTime = $derived(formatDuration(totalSeconds, showSeconds));
 
-  let isExpired = $derived(remaining === 0);
+  let isExpired = $derived(remainingMs === 0);
   let isWaiting = $derived(startTime !== null && startTime.getTime() > nowMs);
 
   let timerClass = $derived.by(() => {
-    if (remaining < 5 * 60 * 1000) return 'danger';
-    if (remaining < 10 * 60 * 1000) return 'warning';
+    if (remainingMs < 5 * 60 * 1000) return 'danger';
+    if (remainingMs < 10 * 60 * 1000) return 'warning';
     return 'ok';
   });
 

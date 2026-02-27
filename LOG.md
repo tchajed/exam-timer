@@ -4,15 +4,18 @@ I want to create a web application for showing a timer to students during an exa
 single page with two side-by-side panes.
 
 ## Instruction pane
+
 The left pane should have whatever instructions need to be shown. This should be a markdown editor
 when clicked, then the rendered version otherwise.
 
 ## Timer pane
+
 The right pane should have a timer. It needs a modal to set up the timer, which should support either
 inputting an end time or a duration. The timer should take up most of the pane, display mm:ss or
 hh:mm:ss, and also show the end time in a smaller font below.
 
 ## Implementation
+
 Use Svelte, TypeScript, and prettier. Use components to make the code modular.
 
 (I interrupted and told it to use bun and sveltekit)

@@ -17,23 +17,16 @@
   let durationHours = $state(1);
   let durationMinutes = $state(30);
 
-  // End time mode — default to 1 hour from now
-  function defaultEndTimeStr(): string {
-    const d = new Date(Date.now() + 60 * 60 * 1000);
+  function toTimeStr(d: Date): string {
     return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   }
 
-  let endTimeStr = $state(defaultEndTimeStr());
+  // End time mode — default to 1 hour from now
+  let endTimeStr = $state(toTimeStr(new Date(Date.now() + 60 * 60 * 1000)));
 
   // Start time (optional)
   let useStartTime = $state(false);
-
-  function defaultStartTimeStr(): string {
-    const d = new Date();
-    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-  }
-
-  let startTimeStr = $state(defaultStartTimeStr());
+  let startTimeStr = $state(toTimeStr(new Date()));
 
   let isValid = $derived.by(() => {
     if (mode === 'duration') {

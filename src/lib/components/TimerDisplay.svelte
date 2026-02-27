@@ -20,23 +20,22 @@
 
   let totalSeconds = $derived(Math.floor(remaining / 1000));
 
-  let displayTime = $derived.by(() => {
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
+  function formatDuration(secs: number): string {
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
     const mm = String(m).padStart(2, '0');
     const ss = String(s).padStart(2, '0');
-    if (h > 0) {
-      return `${String(h).padStart(2, '0')}:${mm}:${ss}`;
-    }
+    if (h > 0) return `${String(h).padStart(2, '0')}:${mm}:${ss}`;
     return `${mm}:${ss}`;
-  });
+  }
+
+  let displayTime = $derived(formatDuration(totalSeconds));
 
   let isExpired = $derived(remaining === 0);
   let isWaiting = $derived(startTime !== null && startTime.getTime() > nowMs);
 
   let timerClass = $derived.by(() => {
-    if (isExpired) return 'expired';
     if (remaining < 5 * 60 * 1000) return 'danger';
     if (remaining < 10 * 60 * 1000) return 'warning';
     return 'ok';
@@ -55,17 +54,13 @@
   let isShort = $derived(totalSeconds < 3600 && !isExpired);
 
   // Static duration display for the waiting state
-  let totalDurationDisplay = $derived.by(() => {
-    if (!startTime) return '';
-    const secs = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
-    const h = Math.floor(secs / 3600);
-    const m = Math.floor((secs % 3600) / 60);
-    const s = secs % 60;
-    const mm = String(m).padStart(2, '0');
-    const ss = String(s).padStart(2, '0');
-    if (h > 0) return `${String(h).padStart(2, '0')}:${mm}:${ss}`;
-    return `${mm}:${ss}`;
-  });
+  let totalDurationDisplay = $derived(
+    startTime
+      ? formatDuration(
+          Math.floor((endTime.getTime() - startTime.getTime()) / 1000)
+        )
+      : ''
+  );
 
   // Progress 0–1 (null when no start time)
   let progress = $derived.by((): number | null => {

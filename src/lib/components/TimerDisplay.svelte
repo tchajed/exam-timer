@@ -14,7 +14,7 @@
     }
 
     tick();
-    const id = setInterval(tick, 500);
+    const id = setInterval(tick, 300);
     return () => clearInterval(id);
   });
 

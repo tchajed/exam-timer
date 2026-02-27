@@ -52,13 +52,13 @@
     showModal = false;
   }
 
-  function openModal() {
-    showModal = true;
-  }
-
-  function resetTimer() {
+  function handleClear() {
     endTime = null;
     startTime = null;
+    showModal = false;
+  }
+
+  function openModal() {
     showModal = true;
   }
 </script>
@@ -67,8 +67,8 @@
   <header class="pane-header">
     <span class="pane-title">Time Remaining</span>
     {#if endTime}
-      <button class="header-btn" onclick={resetTimer} title="Reset timer"
-        >Reset</button
+      <button class="header-btn" onclick={openModal} title="Edit timer"
+        >Edit</button
       >
     {:else}
       <button class="header-btn" onclick={openModal} title="Set timer"
@@ -93,6 +93,7 @@
   <TimerModal
     onstart={handleStart}
     oncancel={handleCancel}
+    onclear={handleClear}
     hasActiveTimer={endTime !== null}
   />
 {/if}

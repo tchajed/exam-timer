@@ -2,10 +2,12 @@
   let {
     onstart,
     oncancel,
+    onclear,
     hasActiveTimer,
   }: {
     onstart: (endTime: Date, startTime: Date | null) => void;
     oncancel: () => void;
+    onclear: () => void;
     hasActiveTimer: boolean;
   } = $props();
 
@@ -47,10 +49,6 @@
       const [sh, sm] = startTimeStr.split(':').map(Number);
       startTime = new Date();
       startTime.setHours(sh, sm, 0, 0);
-      // If start time is in the past, assume next day
-      if (startTime.getTime() <= Date.now()) {
-        startTime.setDate(startTime.getDate() + 1);
-      }
     }
 
     let endTime: Date;
@@ -182,11 +180,18 @@
 
     <footer class="modal-footer">
       {#if hasActiveTimer}
-        <button class="btn-cancel" onclick={oncancel}>Cancel</button>
+        <button class="btn-clear" onclick={onclear}>Clear</button>
+        <div class="footer-right">
+          <button class="btn-cancel" onclick={oncancel}>Cancel</button>
+          <button class="btn-start" onclick={handleStart} disabled={!isValid}>
+            Start Timer →
+          </button>
+        </div>
+      {:else}
+        <button class="btn-start" onclick={handleStart} disabled={!isValid}>
+          Start Timer →
+        </button>
       {/if}
-      <button class="btn-start" onclick={handleStart} disabled={!isValid}>
-        Start Timer →
-      </button>
     </footer>
   </div>
 </div>
@@ -413,10 +418,33 @@
 
   .modal-footer {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     gap: 0.75rem;
     padding: 1.25rem 1.5rem;
     border-top: 1px solid var(--border);
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .btn-clear {
+    padding: 0.6rem 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  .btn-clear:hover {
+    color: #c0392b;
+    border-color: #c0392b;
   }
 
   .btn-cancel {

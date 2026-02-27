@@ -56,7 +56,9 @@
   // Static duration display for the waiting state
   let totalDurationDisplay = $derived(
     startTime
-      ? formatDuration(Math.floor((endTime.getTime() - startTime.getTime()) / 1000))
+      ? formatDuration(
+          Math.floor((endTime.getTime() - startTime.getTime()) / 1000)
+        )
       : ''
   );
 

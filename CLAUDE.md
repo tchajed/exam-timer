@@ -11,6 +11,8 @@ bun run check      # svelte-check type checking
 bun run format     # prettier
 ```
 
+Run `bun run format` after changes to re-format the code.
+
 ## Architecture
 
 Single-page SvelteKit app with `adapter-static`. Two-pane layout: left pane for markdown instructions (click-to-edit), right pane for countdown timer.

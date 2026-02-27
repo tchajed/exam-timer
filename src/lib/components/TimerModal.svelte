@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { X, Hourglass, Clock, Trash2 } from 'lucide-svelte';
+
   let {
     onstart,
     oncancel,
@@ -83,7 +85,9 @@
   <div class="modal" role="dialog" aria-modal="true" aria-label="Set Timer">
     <header class="modal-header">
       <h2>Set Timer</h2>
-      <button class="close-btn" onclick={oncancel} aria-label="Close">×</button>
+      <button class="close-btn" onclick={oncancel} aria-label="Close">
+        <X size={16} aria-hidden="true" />
+      </button>
     </header>
 
     <div class="modal-body">
@@ -96,6 +100,7 @@
           onclick={() => (mode = 'duration')}
           aria-selected={mode === 'duration'}
         >
+          <Hourglass size={13} aria-hidden="true" />
           Duration
         </button>
         <button
@@ -105,6 +110,7 @@
           onclick={() => (mode = 'endtime')}
           aria-selected={mode === 'endtime'}
         >
+          <Clock size={13} aria-hidden="true" />
           End Time
         </button>
       </div>
@@ -183,16 +189,19 @@
 
     <footer class="modal-footer">
       {#if hasActiveTimer}
-        <button class="btn-clear" onclick={onclear}>Clear</button>
+        <button class="btn-clear" onclick={onclear}>
+          <Trash2 size={13} aria-hidden="true" />
+          Clear
+        </button>
         <div class="footer-right">
           <button class="btn-cancel" onclick={oncancel}>Cancel</button>
           <button class="btn-start" onclick={handleStart} disabled={!isValid}>
-            Start Timer →
+            Start Timer
           </button>
         </div>
       {:else}
         <button class="btn-start" onclick={handleStart} disabled={!isValid}>
-          Start Timer →
+          Start Timer
         </button>
       {/if}
     </footer>
@@ -259,10 +268,11 @@
   }
 
   .close-btn {
-    font-size: 1.5rem;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--text-muted);
-    padding: 0.1rem 0.4rem;
+    padding: 0.3rem;
     border-radius: var(--radius);
     transition: color 0.15s;
   }
@@ -287,6 +297,10 @@
 
   .tab {
     flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
     padding: 0.55rem 1rem;
     font-family: var(--font-display);
     font-size: 0.9rem;
@@ -422,7 +436,6 @@
   .modal-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 0.75rem;
     padding: 1.25rem 1.5rem;
     border-top: 1px solid var(--border);
@@ -431,29 +444,39 @@
   .footer-right {
     display: flex;
     gap: 0.75rem;
+    margin-left: auto;
   }
 
   .btn-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
     padding: 0.6rem 1.25rem;
     font-family: var(--font-display);
     font-size: 0.9rem;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
+    line-height: 1;
+    font-weight: 500;
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.08);
+    border: 1px solid rgba(192, 57, 43, 0.35);
     border-radius: var(--radius);
     transition:
-      color 0.15s,
+      background 0.15s,
       border-color 0.15s;
   }
 
   .btn-clear:hover {
-    color: #c0392b;
+    background: rgba(192, 57, 43, 0.15);
     border-color: #c0392b;
   }
 
   .btn-cancel {
+    display: inline-flex;
+    align-items: center;
     padding: 0.6rem 1.25rem;
     font-family: var(--font-display);
     font-size: 0.9rem;
+    line-height: 1;
     color: var(--text-muted);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -465,10 +488,15 @@
   }
 
   .btn-start {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
     padding: 0.6rem 1.5rem;
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1;
     font-weight: 500;
+    white-space: nowrap;
     color: #fff;
     background: var(--accent);
     border-radius: var(--radius);

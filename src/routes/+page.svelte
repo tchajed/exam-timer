@@ -19,8 +19,25 @@
   }
 
   .divider {
-    width: 1px;
     background: var(--border);
     flex-shrink: 0;
+    width: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .layout {
+      flex-direction: column;
+    }
+
+    /* Timer moves to top, divider between, instructions below */
+    .layout :global(.timer-pane) {
+      order: -2;
+    }
+
+    .divider {
+      order: -1;
+      width: 100%;
+      height: 1px;
+    }
   }
 </style>

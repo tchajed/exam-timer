@@ -130,6 +130,17 @@
     font-size: clamp(3.5rem, 11vw, 12rem);
   }
 
+  /* In vertical layout on narrow screens, use more of the available width */
+  @media (max-width: 640px) {
+    .digits {
+      font-size: clamp(4rem, 22vw, 7rem);
+    }
+
+    .digits.short {
+      font-size: clamp(5rem, 28vw, 9rem);
+    }
+  }
+
   .digits.waiting {
     opacity: 0.5;
   }

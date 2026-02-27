@@ -25,7 +25,12 @@
    * the timer.
    */
 
-  const mountTime = Date.now();
+  let mountTime = $state(Date.now());
+  $effect(() => {
+    endTime;
+    mountTime = Date.now();
+  });
+
   const INITIAL_SECONDS_DURATION = 30 * 1000; // 30 seconds
   const FINAL_SECONDS_THRESHOLD = 2 * 60 * 1000; // 2 minutes
 

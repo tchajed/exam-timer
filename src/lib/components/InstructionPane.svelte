@@ -1,6 +1,7 @@
 <script lang="ts">
   import { marked } from 'marked';
   import { tick } from 'svelte';
+  import { Check, Pencil } from 'lucide-svelte';
 
   const DEFAULT_INSTRUCTIONS = `## Exam Instructions
 
@@ -57,7 +58,13 @@ Please read carefully before you begin.
       onclick={isEditing ? stopEditing : startEditing}
       title={isEditing ? 'Save and preview' : 'Edit instructions'}
     >
-      {isEditing ? 'Done' : 'Edit'}
+      {#if isEditing}
+        <Check size={13} aria-hidden="true" />
+        Done
+      {:else}
+        <Pencil size={13} aria-hidden="true" />
+        Edit
+      {/if}
     </button>
   </header>
 
@@ -116,6 +123,9 @@ Please read carefully before you begin.
   }
 
   .header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
     font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;

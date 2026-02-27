@@ -1,6 +1,7 @@
 <script lang="ts">
   import TimerDisplay from './TimerDisplay.svelte';
   import TimerModal from './TimerModal.svelte';
+  import { Clock, Settings } from 'lucide-svelte';
 
   function getStoredDate(key: string): Date | null {
     if (typeof localStorage === 'undefined') return null;
@@ -62,13 +63,15 @@
   <header class="pane-header">
     <span class="pane-title">Time Remaining</span>
     {#if endTime}
-      <button class="header-btn" onclick={openModal} title="Edit timer"
-        >Edit</button
-      >
+      <button class="header-btn" onclick={openModal} title="Edit timer">
+        <Settings size={13} aria-hidden="true" />
+        Edit
+      </button>
     {:else}
-      <button class="header-btn" onclick={openModal} title="Set timer"
-        >Set Timer</button
-      >
+      <button class="header-btn" onclick={openModal} title="Set timer">
+        <Clock size={13} aria-hidden="true" />
+        Set Timer
+      </button>
     {/if}
   </header>
 
@@ -78,7 +81,10 @@
     {:else}
       <div class="idle-state">
         <p class="idle-label">No timer running</p>
-        <button class="idle-btn" onclick={openModal}> Set Timer </button>
+        <button class="idle-btn" onclick={openModal}>
+          <Clock size={16} aria-hidden="true" />
+          Set Timer
+        </button>
       </div>
     {/if}
   </div>
@@ -119,6 +125,9 @@
   }
 
   .header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
     font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;
@@ -160,6 +169,9 @@
   }
 
   .idle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
     font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 500;

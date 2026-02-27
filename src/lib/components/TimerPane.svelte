@@ -12,8 +12,18 @@
     return date.getTime() > Date.now() ? date : null;
   }
 
+  function getStoredStartTime(): Date | null {
+    if (typeof localStorage === 'undefined') return null;
+    const stored = localStorage.getItem('exam-timer-start');
+    if (!stored) return null;
+    const ts = parseInt(stored, 10);
+    if (isNaN(ts)) return null;
+    return new Date(ts);
+  }
+
   const initialEndTime = getStoredEndTime();
   let endTime = $state<Date | null>(initialEndTime);
+  let startTime = $state<Date | null>(initialEndTime ? getStoredStartTime() : null);
   let showModal = $state(initialEndTime === null);
 
   $effect(() => {
@@ -24,8 +34,17 @@
     }
   });
 
-  function handleStart(newEndTime: Date) {
+  $effect(() => {
+    if (startTime) {
+      localStorage.setItem('exam-timer-start', startTime.getTime().toString());
+    } else {
+      localStorage.removeItem('exam-timer-start');
+    }
+  });
+
+  function handleStart(newEndTime: Date, newStartTime: Date | null) {
     endTime = newEndTime;
+    startTime = newStartTime;
     showModal = false;
   }
 
@@ -39,6 +58,7 @@
 
   function resetTimer() {
     endTime = null;
+    startTime = null;
     showModal = true;
   }
 </script>
@@ -59,7 +79,7 @@
 
   <div class="pane-body">
     {#if endTime}
-      <TimerDisplay {endTime} />
+      <TimerDisplay {endTime} {startTime} />
     {:else}
       <div class="idle-state">
         <p class="idle-label">No timer running</p>
@@ -97,19 +117,15 @@
 
   .pane-title {
     font-family: var(--font-display);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-secondary);
   }
 
   .header-btn {
     font-family: var(--font-display);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--text-muted);
     padding: 0.3rem 0.8rem;
     border: 1px solid var(--border);
@@ -145,15 +161,12 @@
     font-family: var(--font-display);
     font-size: 1.1rem;
     color: var(--text-muted);
-    letter-spacing: 0.06em;
   }
 
   .idle-btn {
     font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--accent);
     padding: 0.7rem 2rem;
     border: 1px solid var(--accent);
@@ -165,7 +178,7 @@
   }
 
   .idle-btn:hover {
-    background: rgba(200, 148, 58, 0.2);
+    background: rgba(160, 112, 40, 0.2);
     color: var(--accent-hover);
   }
 </style>

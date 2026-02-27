@@ -1,27 +1,27 @@
 :root {
-  --bg: #0d1117;
-  --surface: #13181f;
-  --surface-raised: #1c2130;
-  --border: #252d3d;
-  --border-subtle: #1a2030;
+  --bg: #f6f2eb;
+  --surface: #ede8de;
+  --surface-raised: #e4ddd2;
+  --border: #c8bca8;
+  --border-subtle: #d8d2c8;
 
-  --text-primary: #e8dfd0;
-  --text-secondary: #9e9589;
-  --text-muted: #6b6358;
+  --text-primary: #1c170f;
+  --text-secondary: #6b5d4c;
+  --text-muted: #9e8c7a;
 
-  --accent: #c8943a;
-  --accent-dim: rgba(200, 148, 58, 0.12);
-  --accent-hover: #daa84e;
+  --accent: #a07028;
+  --accent-dim: rgba(160, 112, 40, 0.12);
+  --accent-hover: #b88030;
 
-  --timer-ok: #c8943a;
-  --timer-warn: #d4773a;
-  --timer-danger: #d44040;
+  --timer-ok: #a07028;
+  --timer-warn: #b85020;
+  --timer-danger: #c43030;
 
-  --danger: #d44040;
-  --danger-dim: rgba(212, 64, 64, 0.12);
+  --danger: #c43030;
+  --danger-dim: rgba(196, 48, 48, 0.1);
 
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Crimson Pro', Georgia, serif;
+  --font-display: 'DM Sans', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'Space Mono', 'Courier New', monospace;
 
   --header-height: 52px;
@@ -46,6 +46,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  color-scheme: light;
 }
 
 button {

@@ -4,7 +4,7 @@
     oncancel,
     hasActiveTimer,
   }: {
-    onstart: (endTime: Date) => void;
+    onstart: (endTime: Date, startTime: Date | null) => void;
     oncancel: () => void;
     hasActiveTimer: boolean;
   } = $props();
@@ -23,6 +23,16 @@
 
   let endTimeStr = $state(defaultEndTimeStr());
 
+  // Start time (optional)
+  let useStartTime = $state(false);
+
+  function defaultStartTimeStr(): string {
+    const d = new Date();
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+
+  let startTimeStr = $state(defaultStartTimeStr());
+
   let isValid = $derived.by(() => {
     if (mode === 'duration') {
       return durationHours > 0 || durationMinutes > 0;
@@ -31,11 +41,24 @@
   });
 
   function handleStart() {
+    let startTime: Date | null = null;
+
+    if (useStartTime && startTimeStr) {
+      const [sh, sm] = startTimeStr.split(':').map(Number);
+      startTime = new Date();
+      startTime.setHours(sh, sm, 0, 0);
+      // If start time is in the past, assume next day
+      if (startTime.getTime() <= Date.now()) {
+        startTime.setDate(startTime.getDate() + 1);
+      }
+    }
+
     let endTime: Date;
 
     if (mode === 'duration') {
-      endTime = new Date();
-      endTime.setSeconds(0, 0);
+      const base = startTime ?? new Date();
+      endTime = new Date(base.getTime());
+      if (!startTime) endTime.setSeconds(0, 0);
       endTime.setMinutes(endTime.getMinutes() + durationMinutes);
       endTime.setHours(endTime.getHours() + durationHours);
     } else {
@@ -48,7 +71,7 @@
       }
     }
 
-    onstart(endTime);
+    onstart(endTime, startTime);
   }
 
   function handleOverlayClick(e: MouseEvent) {
@@ -122,7 +145,9 @@
             />
           </div>
         </div>
-        <p class="hint">Timer starts immediately from now.</p>
+        <p class="hint">
+          {useStartTime ? 'Duration from the scheduled start time.' : 'Timer starts immediately from now.'}
+        </p>
       {/if}
 
       <!-- End time input -->
@@ -142,6 +167,17 @@
           If this time has already passed today, tomorrow is assumed.
         </p>
       {/if}
+
+      <!-- Optional start time -->
+      <div class="start-section">
+        <label class="start-toggle">
+          <input type="checkbox" bind:checked={useStartTime} class="start-check" />
+          <span>Schedule start time</span>
+        </label>
+        {#if useStartTime}
+          <input type="time" bind:value={startTimeStr} class="time-input start-time-input" />
+        {/if}
+      </div>
     </div>
 
     <footer class="modal-footer">
@@ -159,7 +195,7 @@
   .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
@@ -178,13 +214,13 @@
   }
 
   .modal {
-    background: var(--surface);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     width: min(420px, 90vw);
     box-shadow:
-      0 24px 64px rgba(0, 0, 0, 0.6),
-      0 0 0 1px rgba(255, 255, 255, 0.03);
+      0 24px 64px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(0, 0, 0, 0.04);
     animation: slide-up 0.18s ease;
   }
 
@@ -209,10 +245,8 @@
 
   .modal-header h2 {
     font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 1.15rem;
+    font-weight: 600;
     color: var(--text-secondary);
   }
 
@@ -247,9 +281,8 @@
     flex: 1;
     padding: 0.55rem 1rem;
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
     color: var(--text-muted);
     background: transparent;
     border-right: 1px solid var(--border);
@@ -269,7 +302,7 @@
 
   .tab:hover:not(.active) {
     color: var(--text-secondary);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(0, 0, 0, 0.03);
   }
 
   .inputs-row {
@@ -292,8 +325,6 @@
     font-family: var(--font-display);
     font-size: 0.8rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--text-muted);
   }
 
@@ -323,7 +354,6 @@
     width: 100%;
     font-size: 1.4rem;
     text-align: left;
-    color-scheme: dark;
   }
 
   .number-input:focus,
@@ -345,6 +375,42 @@
     font-style: italic;
   }
 
+  .start-section {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .start-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    user-select: none;
+  }
+
+  .start-toggle:hover {
+    color: var(--text-secondary);
+  }
+
+  .start-check {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .start-time-input {
+    font-size: 1.4rem;
+    width: 100%;
+  }
+
   .modal-footer {
     display: flex;
     justify-content: flex-end;
@@ -357,7 +423,6 @@
     padding: 0.6rem 1.25rem;
     font-family: var(--font-display);
     font-size: 0.9rem;
-    letter-spacing: 0.05em;
     color: var(--text-muted);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -373,8 +438,7 @@
     font-family: var(--font-display);
     font-size: 0.95rem;
     font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--bg);
+    color: #fff;
     background: var(--accent);
     border-radius: var(--radius);
     transition:

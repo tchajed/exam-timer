@@ -43,6 +43,8 @@ Please read carefully before you begin.
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       stopEditing();
+    } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      stopEditing();
     }
   }
 </script>
@@ -108,19 +110,15 @@ Please read carefully before you begin.
 
   .pane-title {
     font-family: var(--font-display);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-secondary);
   }
 
   .header-btn {
     font-family: var(--font-display);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--text-muted);
     padding: 0.3rem 0.8rem;
     border: 1px solid var(--border);
@@ -169,7 +167,7 @@ Please read carefully before you begin.
   }
 
   .markdown-preview:hover {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(0, 0, 0, 0.02);
   }
 
   .placeholder {
@@ -178,6 +176,10 @@ Please read carefully before you begin.
   }
 
   /* Markdown content styles */
+  .markdown-preview {
+    font-size: 1.15rem;
+  }
+
   .markdown-preview :global(h1),
   .markdown-preview :global(h2),
   .markdown-preview :global(h3) {
@@ -190,17 +192,17 @@ Please read carefully before you begin.
   }
 
   .markdown-preview :global(h1) {
-    font-size: 1.9rem;
+    font-size: 2.2rem;
     border-bottom: 1px solid var(--border);
     padding-bottom: 0.4em;
   }
 
   .markdown-preview :global(h2) {
-    font-size: 1.45rem;
+    font-size: 1.7rem;
   }
 
   .markdown-preview :global(h3) {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   .markdown-preview :global(h1:first-child),

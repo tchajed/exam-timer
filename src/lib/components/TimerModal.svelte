@@ -202,7 +202,6 @@
       {:else}
         <button class="btn-start" onclick={handleStart} disabled={!isValid}>
           Start Timer
-          <Play size={13} aria-hidden="true" fill="currentColor" />
         </button>
       {/if}
     </footer>

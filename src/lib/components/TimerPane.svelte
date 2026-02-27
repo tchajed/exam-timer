@@ -2,29 +2,22 @@
   import TimerDisplay from './TimerDisplay.svelte';
   import TimerModal from './TimerModal.svelte';
 
-  function getStoredEndTime(): Date | null {
+  function getStoredDate(key: string): Date | null {
     if (typeof localStorage === 'undefined') return null;
-    const stored = localStorage.getItem('exam-timer-end');
-    if (!stored) return null;
-    const ts = parseInt(stored, 10);
-    if (isNaN(ts)) return null;
-    const date = new Date(ts);
-    return date.getTime() > Date.now() ? date : null;
-  }
-
-  function getStoredStartTime(): Date | null {
-    if (typeof localStorage === 'undefined') return null;
-    const stored = localStorage.getItem('exam-timer-start');
+    const stored = localStorage.getItem(key);
     if (!stored) return null;
     const ts = parseInt(stored, 10);
     if (isNaN(ts)) return null;
     return new Date(ts);
   }
 
-  const initialEndTime = getStoredEndTime();
+  const initialEndTime = (() => {
+    const d = getStoredDate('exam-timer-end');
+    return d && d.getTime() > Date.now() ? d : null;
+  })();
   let endTime = $state<Date | null>(initialEndTime);
   let startTime = $state<Date | null>(
-    initialEndTime ? getStoredStartTime() : null
+    initialEndTime ? getStoredDate('exam-timer-start') : null
   );
   let showModal = $state(false);
 

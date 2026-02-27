@@ -17,11 +17,7 @@
   --timer-warn: #b85020;
   --timer-danger: #c43030;
 
-  --danger: #c43030;
-  --danger-dim: rgba(196, 48, 48, 0.1);
-
   --font-display: 'DM Sans', system-ui, sans-serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'Space Mono', 'Courier New', monospace;
 
   --header-height: 52px;

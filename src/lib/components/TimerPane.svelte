@@ -26,7 +26,7 @@
   let startTime = $state<Date | null>(
     initialEndTime ? getStoredStartTime() : null
   );
-  let showModal = $state(initialEndTime === null);
+  let showModal = $state(false);
 
   $effect(() => {
     if (endTime) {

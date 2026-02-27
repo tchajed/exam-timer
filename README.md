@@ -20,13 +20,13 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ## Scripts
 
-| Script | Description |
-|---|---|
-| `bun run dev` | Start dev server |
-| `bun run build` | Production build |
-| `bun run preview` | Preview the production build |
-| `bun run check` | Type-check with `svelte-check` |
-| `bun run format` | Format all files with Prettier |
+| Script            | Description                    |
+| ----------------- | ------------------------------ |
+| `bun run dev`     | Start dev server               |
+| `bun run build`   | Production build               |
+| `bun run preview` | Preview the production build   |
+| `bun run check`   | Type-check with `svelte-check` |
+| `bun run format`  | Format all files with Prettier |
 
 ## Stack
 

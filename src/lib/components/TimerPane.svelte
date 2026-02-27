@@ -23,7 +23,9 @@
 
   const initialEndTime = getStoredEndTime();
   let endTime = $state<Date | null>(initialEndTime);
-  let startTime = $state<Date | null>(initialEndTime ? getStoredStartTime() : null);
+  let startTime = $state<Date | null>(
+    initialEndTime ? getStoredStartTime() : null
+  );
   let showModal = $state(initialEndTime === null);
 
   $effect(() => {

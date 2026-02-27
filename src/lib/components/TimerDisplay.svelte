@@ -1,8 +1,6 @@
 <script lang="ts">
-  let {
-    endTime,
-    startTime = null,
-  }: { endTime: Date; startTime: Date | null } = $props();
+  let { endTime, startTime = null }: { endTime: Date; startTime: Date | null } =
+    $props();
 
   let remaining = $state(0);
   let nowMs = $state(Date.now());

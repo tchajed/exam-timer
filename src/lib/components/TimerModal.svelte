@@ -144,7 +144,9 @@
           </div>
         </div>
         <p class="hint">
-          {useStartTime ? 'Duration from the scheduled start time.' : 'Timer starts immediately from now.'}
+          {useStartTime
+            ? 'Duration from the scheduled start time.'
+            : 'Timer starts immediately from now.'}
         </p>
       {/if}
 
@@ -169,11 +171,19 @@
       <!-- Optional start time -->
       <div class="start-section">
         <label class="start-toggle">
-          <input type="checkbox" bind:checked={useStartTime} class="start-check" />
+          <input
+            type="checkbox"
+            bind:checked={useStartTime}
+            class="start-check"
+          />
           <span>Schedule start time</span>
         </label>
         {#if useStartTime}
-          <input type="time" bind:value={startTimeStr} class="time-input start-time-input" />
+          <input
+            type="time"
+            bind:value={startTimeStr}
+            class="time-input start-time-input"
+          />
         {/if}
       </div>
     </div>

@@ -28,7 +28,7 @@
     "vite-plugin-pwa": "^1.2.0"
   },
   "dependencies": {
-    "lucide-svelte": "^0.575.0",
+    "lucide-svelte": "^0.577.0",
     "marked": "^17.0.3"
   }
 }

@@ -24,6 +24,7 @@ export default defineConfig({
   plugins: [
     sveltekit(),
     SvelteKitPWA({
+      injectRegister: false,
       manifest: {
         name: 'Exam Timer',
         short_name: 'Exam Timer',
